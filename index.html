@@ -22,6 +22,10 @@
   --c-dzivnieki: #B0550A;
   --c-jaukta: #3C4658;
   --c-vardi: #4453C9;
+  --c-vardulis: #1C7F4E;
+  --v-hit: #1F8A55;
+  --v-near: #C58A12;
+  --v-miss: #6E7A86;
   --c: var(--c-jaukta);
   --font-display: ui-rounded, "SF Pro Rounded", "Segoe UI Variable Display", "Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-body: system-ui, -apple-system, "Segoe UI Variable Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -45,6 +49,10 @@
     --c-dzivnieki: #F0A55C;
     --c-jaukta: #AEB9CA;
     --c-vardi: #95A0F2;
+    --c-vardulis: #5BC98F;
+    --v-hit: #2F9E66;
+    --v-near: #C9951E;
+    --v-miss: #242C33;
     color-scheme: dark;
   }
 }
@@ -65,6 +73,10 @@
   --c-dzivnieki: #F0A55C;
   --c-jaukta: #AEB9CA;
   --c-vardi: #95A0F2;
+  --c-vardulis: #5BC98F;
+  --v-hit: #2F9E66;
+  --v-near: #C9951E;
+  --v-miss: #242C33;
   color-scheme: dark;
 }
 
@@ -525,6 +537,55 @@ button { cursor: pointer; }
 .w-share-text { width: 100%; margin-top: 12px; padding: 10px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface-2); font: inherit; }
 .w-stats { display: grid; grid-template-columns: 1fr auto; gap: 4px 16px; margin: 0; font-variant-numeric: tabular-nums; }
 .w-stats dd { margin: 0; font-weight: 700; text-align: right; }
+/* ---------- VĀRDULIS ---------- */
+.mode-vardulis .mode-icon { background: var(--c-vardulis); color: #fff; }
+.w-head h2 .qm-v { color: var(--c-vardulis); }
+.v-grid { display: grid; gap: 6px; width: min(100%, 330px); margin: 4px auto 14px; }
+.v-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+.v-tile {
+  display: grid; place-items: center; aspect-ratio: 1; border: 2px solid var(--line); border-radius: 10px;
+  background: var(--surface); font-family: var(--font-display); font-size: clamp(1.5rem, 7vw, 2rem); font-weight: 800; line-height: 1;
+}
+.v-tile.filled { border-color: var(--line-strong); }
+.v-tile.correct, .v-tile.present, .v-tile.absent { border-color: transparent; color: #fff; }
+.v-tile.correct { background: var(--v-hit); }
+.v-tile.present { background: var(--v-near); }
+.v-tile.absent { background: var(--v-miss); }
+.v-tile.reveal { animation: v-flip .5s ease-in-out both; animation-delay: calc(var(--i) * 180ms); }
+.v-row.shake { animation: v-shake .4s; }
+@keyframes v-pop { 50% { transform: scale(1.08); } }
+@keyframes v-flip {
+  0% { transform: rotateX(0); background: var(--surface); color: var(--ink); border-color: var(--line-strong); }
+  49% { transform: rotateX(90deg); background: var(--surface); color: var(--ink); border-color: var(--line-strong); }
+  50% { transform: rotateX(90deg); }
+  100% { transform: rotateX(0); }
+}
+@keyframes v-shake { 20%, 60% { transform: translateX(-6px); } 40%, 80% { transform: translateX(6px); } }
+.v-toast-wrap { position: relative; height: 0; }
+.v-toast {
+  position: absolute; left: 50%; top: -6px; z-index: 5; transform: translate(-50%, -100%); padding: 8px 14px; border-radius: 10px;
+  background: var(--ink); color: var(--ground); font-weight: 700; font-size: .92rem; white-space: nowrap; box-shadow: var(--shadow);
+}
+.v-keys { display: grid; gap: 6px; margin: 0 -8px 16px; user-select: none; touch-action: manipulation; }
+.v-krow { display: flex; gap: 4px; justify-content: center; }
+.v-key {
+  flex: 1 1 0; min-width: 0; max-width: 44px; height: 54px; padding: 0; border: 0; border-radius: 8px;
+  background: color-mix(in srgb, var(--ink) 11%, var(--surface)); color: var(--ink); font-weight: 800; font-size: 1.05rem;
+}
+.v-key.wide { flex: 1.6 1 0; max-width: 76px; font-size: .78rem; letter-spacing: .03em; }
+.v-key.wide[data-k="back"] { font-size: 1.2rem; }
+.v-key.correct { background: var(--v-hit); color: #fff; }
+.v-key.present { background: var(--v-near); color: #fff; }
+.v-key.absent { background: var(--v-miss); color: rgba(255, 255, 255, .6); }
+.v-key:active { filter: brightness(.9); }
+.v-end { margin: 0 0 16px; text-align: center; }
+.v-end:focus { outline: none; }
+.v-end .end-actions { justify-content: center; margin-top: 14px; }
+.v-dist { display: grid; gap: 4px; margin: 0; padding: 0; list-style: none; font-variant-numeric: tabular-nums; }
+.v-dist li { display: grid; grid-template-columns: 1.2em 1fr; align-items: center; gap: 8px; }
+.v-dist i { display: block; min-width: 1.8em; padding: 2px 6px; border-radius: 4px; background: var(--v-miss); color: #fff; font-style: normal; font-weight: 700; font-size: .85rem; text-align: right; }
+.v-dist i.now { background: var(--v-hit); }
+@media (prefers-reduced-motion: reduce) { .v-tile, .v-row { animation: none !important; } }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 @media (max-width: 420px) { .w-row { grid-template-columns: minmax(0, 1fr) 70px 3em; gap: 8px; padding: 10px 12px; } }
 
@@ -623,6 +684,11 @@ button { cursor: pointer; }
         <span class="mode-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/></svg></span>
         <span class="mode-name">TUVU!</span>
         <span class="mode-desc">Atrodi slepeno vārdu pēc nozīmes. Jo mazāks skaitlis, jo tuvāk esi.</span>
+      </button>
+      <button type="button" class="mode mode-wide mode-vardulis" data-open="vardulis">
+        <span class="mode-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="8.5" width="5" height="7" rx="1"/><rect x="9.5" y="8.5" width="5" height="7" rx="1" fill="currentColor"/><rect x="16.5" y="8.5" width="5" height="7" rx="1"/></svg></span>
+        <span class="mode-name">VĀRDULIS</span>
+        <span class="mode-desc">Uzmini piecu burtu vārdu sešos mēģinājumos. Krāsas rāda, kuri burti trāpīja.</span>
       </button>
     </div>
 
@@ -779,6 +845,45 @@ button { cursor: pointer; }
     <details class="howto">
       <summary>Statistika</summary>
       <div class="howto-body"><dl class="w-stats" id="w-stats"></dl></div>
+    </details>
+  </section>
+
+  <!-- VĀRDULIS -->
+  <section id="screen-vardulis" hidden aria-labelledby="v-title">
+    <div class="topbar">
+      <button type="button" class="ghost" id="v-back">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+        Sākums
+      </button>
+      <span class="count" id="v-meta"></span>
+    </div>
+    <header class="w-head">
+      <h2 id="v-title" tabindex="-1">VĀRDULIS</h2>
+    </header>
+    <div class="w-tabs" role="tablist" aria-label="Spēles veids">
+      <button type="button" role="tab" id="v-tab-daily" aria-selected="true">Šodienas vārds</button>
+      <button type="button" role="tab" id="v-tab-free" aria-selected="false">Brīvā spēle</button>
+    </div>
+    <div class="v-grid" id="v-grid" role="grid" aria-label="Minējumi"></div>
+    <div class="v-toast-wrap"><div class="v-toast" id="v-toast" role="status" aria-live="polite" hidden></div></div>
+    <div class="v-end card" id="v-end" tabindex="-1" hidden></div>
+    <div class="v-keys" id="v-keys" aria-label="Tastatūra"></div>
+    <details class="howto">
+      <summary>Kā spēlēt?</summary>
+      <div class="howto-body">
+        <p>Uzmini piecu burtu latviešu vārdu sešos mēģinājumos. Katram minējumam jābūt īstam vārdam. Pēc minējuma burti iekrāsojas:</p>
+        <ul>
+          <li><b>Zaļš</b> — burts ir vārdā un īstajā vietā.</li>
+          <li><b>Dzeltens</b> — burts ir vārdā, bet citā vietā.</li>
+          <li><b>Pelēks</b> — šā burta vārdā nav.</li>
+        </ul>
+        <p>Burti ar garumzīmēm un mīkstinājuma zīmēm ir atsevišķi burti: „a” un „ā” nav viens un tas pats. Var rakstīt arī ar datora tastatūru.</p>
+        <p>Šodienas vārds visiem ir vienāds, un rīt būs jauns. Brīvajā spēlē var minēt, cik tīk.</p>
+      </div>
+    </details>
+    <details class="howto">
+      <summary>Statistika</summary>
+      <div class="howto-body" id="v-stats"></div>
     </details>
   </section>
 
@@ -52670,7 +52775,7 @@ const state = { mode: loadMode(), cat: null, round: [], i: 0, results: [], answe
 const seen = new Set();
 
 const $ = sel => document.querySelector(sel);
-const screens = { start: $("#screen-start"), game: $("#screen-game"), end: $("#screen-end"), words: $("#screen-words") };
+const screens = { start: $("#screen-start"), game: $("#screen-game"), end: $("#screen-end"), words: $("#screen-words"), vardulis: $("#screen-vardulis") };
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 function poolFor(key, mode = state.mode) {
@@ -53211,7 +53316,7 @@ function showEnd() {
 // ---------- Notikumi ----------
 $("#modes").addEventListener("click", e => {
   const b = e.target.closest(".mode");
-  if (b && b.dataset.open) openWords();
+  if (b && b.dataset.open) b.dataset.open === "vardulis" ? openVardulis() : openWords();
   else if (b) setMode(b.dataset.mode);
 });
 $("#tiles").addEventListener("click", e => {
@@ -53486,6 +53591,223 @@ $("#w-win").addEventListener("click", e => {
   if (e.target.id === "w-to-free") wStart("free");
 });
 $("#w-input").addEventListener("input", () => { if ($("#w-msg").classList.contains("err")) wMsg(""); });
+
+/* VARDULIS-WORDS:START */
+// Atļautie minējumi: piecu burtu vārdi no fastText cc.lv.300 vārdu saraksta (CC BY-SA 3.0).
+const VARDULIS_WORDS = "aatri abata abate abats abatu abiem abies abonē abpus abuse adams adata adatu adigi adigu adīju adīta adīti adīts adītu afiša afišu afišā afēra afēru afērā agara aglom agram agras agrie agros agrāk agrās ahaju ahāta ahāts ahātu ailas ailes ailām ailēm ailēs ainai ainas ainām ainās airis airus airēt aitai aitas aitām aizas aizej aizām akanu akači akaču aklam aklas aklie aklus aklās aknas aknām aknās akotu aktam aktos aktus akčes akūta akūti akūto akūts akūtu akūtā alata albus alces aleja aleju alejā algai algas algot algām algās alibi aliem aliņu aliņš alkam alkas alkst alkām allaž alnim alnis altam alvas alvis alēle amata amati amats amatu amatā ambra amisa amore amīds amīni amīns amīnu amūrs amūru anete angli angļi angļu animē anoda anods anodu ansis antra anulē anālo anāls anālā anīsa anīss aorta aortu aortā apakš apaug apava apavi apavs apavu apači apaču apaļa apaļi apaļo apaļu apaļā apaļš apber apbur apcep apcer apceļ apelē apgāž apgūs apgūt apiet apiņi apiņu apjož apjūk aplam aplej aplim aplis apmet apnīk apogi apogs apogu aprij aprit aprok aprīs aprīt apses apsēm aptin aptur aptīt apvij apzog apēda apēdu apēst apļos apļus apņem apšūt areja arfai arfas arhit aries arkas arkla arkli arkls arklu arkām aroda arods arodu arodā aroma arpus arvis arābi arābs arābu arāja arājs arāju arēja arēna arēnu arēnā asais asaku asara asari asaro asaru asiem asins asiņo asiņu asnus astei astes astma astmu astra astro astēm asuma asumi asums asumu asāka asāki asāks asāku ataug atbil atceļ atdod atdos atdot atgūs atgūt aties atiet atkal atlas atlec atmet atmin atnes atnāc atnāk atola atoli atols atolu atolā atoma atomi atoms atomu atomā atrak atrie atrij atrod atrāk atsit atsāk attie attur attēl atved atver atvēl atzīs atzīt atņem atšūt audos audus audze audzi audzē audžu augam augli auglī augos augot augst augtu augus augām augļa augļi augļu augša augšu augšv augšā aukas aukla aukle aukli auklu auklā auklē aukļu auras ausij ausis ausma austa austi austs ausīm ausīs autor autos auzas auzām auzās auļos avarē avene aveņu avize avota avoti avots avotu avotā avāri avāru avīze avīzi avīzē avīžu azars azeru azotē aģitē aļģes aļģēm aļģēs aļņus baida baigi baigo baigā baisa baisi baiso baiss baisu baisā baita baiti baits baitu baitā baiļu bakas bakām balle balli ballu ballē balsi balso balss balsu balsī balta balti balto balts baltu baltā balva balvu balvā banda bandu bandā banka banks banku bankā banot banti bantu baram barbe bardu barga bargi bargo bargs bargu bargā baros barot barus basam baski basku basus basām batas bauda baudi baudu baumo baumu baļķa baļķi baļķu baļļa baļļu bažas bažām bebra bebri bebrs bebru bedre bedri bedru bedrē beibe beidz beigs beigt beigu bekas bekot bella bende beram berni berns bernu berus berze berzi berzē besis beļģi beļģu beņķa beņķi bieds biedu biedē biete bieti bieza biezi biezo biezs biezu biezā biešu bieža bieži biežo biežs biežu biežā bijas bijis bijām bijāt bikli bikts bikšu bilda bilde bildi bildē bilst bilžu bingo bioma biomu biomā birka birku birst birzi birzs birzī birža biržu biržā bises bitei bites bitos bitus bitēm bizes bišku bišķi blatu blefs blenž bleķa bliež bloga blogi blogs blogu blogā bloka bloki bloks bloku blokā bloķē blusa blusu bluķa bluķi bluķu blāva blāvi blāvs blāvu blāķi blēdi blēņu blēži blēžu blīva blīve blīvi blīvo blīvs blīvu blīvā blūza blūze blūzi blūzs blūzu bodes bodēm bojas bojām bojāt boksa bokss boksu boksā boldā bomba bomži bomžu bonus bordo borta borti borts bortu bortā bosam botam botas botus bočča bradā brasa brasā brauc bravo braši brida bridi bridu brien briga brist brita briti brits britu broma broms bromu broša brošu bruka brukt brulē brusa brusu bruto bruģa bruģi bruģē bruņu brāli brāķa brāķi brāļa brāļi brāļu brēca brēka brēkt brēku brīdi brīdī brīva brīvi brīvo brīvs brīvu brīvā brīze brīža brīži brīžu brūce brūci brūcē brūna brūni brūno brūns brūnu brūnā brūte brūzi brūzī brūču brūža buksē bulla bulli bullu bullā bulta bultu bumba bumbu bumbā bungu buras burka burku burkā burta burti burts burtu burtā burve burvi burām burās burāt buršu butes buutu bučas bučot buļļa buļļi buļļu bākai bākas bākām bālas bāliņ bāram bārda bārdu bārdā bāros bārus bāzei bāzes bāzēm bāzēs bēdas bēdām bēdās bēgli bēgot bēgtu bēgļa bēgļi bēgļu bēres bēris bērna bērni bērns bērnu bērnā bērza bērzi bērzs bērzu bērēm bērēs bīdes bīdīt bīgla bīgli bīgls bīglu bītli bītlu bļauj bļaut bļoda bļodu bļodā bļāva būdas būdām būdās būris būros būrus būsim būsit būtne būtni būtnē būtņu būvei būves būvju būvēm būvēs būvēt būšot canto caram cauna caune caunu caura cauri caurs cauru caurā causa cdots cedēt cehos cehus celim celis celma celmi celms celmu celta celti celto celts celtu celtā cenai cenam cenas centa centi centr cents centu centā cenza cenzs cenzu cenām cenās cepam cepas cepli ceplī cepot cepta cepti cepto cepts ceptu ceptā cepās cepļa cepļi ceram cerat cerot cerus cerēt ceļam ceļas ceļos ceļot ceļus cibas ciema ciemi ciems ciemu ciemā ciena cieni cienu cienā ciest cieta ciete cieti cieto ciets cietu cietā cieņa cieņu cieņā cieša cieši ciešo ciešs ciešu ciešā cijas cikla cikli cikls ciklu ciklā cikos cilme cilmi cilne cilni cilnē cilpa cilpu cilpā cilti cilts ciltī cilvē cilāt cilšu cimda cimdi cimds cimdu cimdā cinka cinks cinku cirka cirks cirku cirkā cirst cirta cirte cirtu cirtē cirvi cisku cista cistu citai citam citas citie citos citri citur citus citām citās citēt ciāna ciļņa ciļņi ciļņu colla collu copei copes cords cālis cāļus cēlas cēlis cēlos cēlām cēlās cēsis cīnas cīnos cīnās cīņai cīņas cīņām cīņās cūkai cūkas cūkām dabai dabas dabon dabut dabūs dabūt dadža dadži dadžu daile daili daina dainu daiva daivu daivā daiļa daiļi daiļo daiļu daiļā dakša dakšu dalas dalli dalos dalot dalām dalās dalīs dalīt dambi dambī danci danco danks danči danču daram darat darba darbi darbs darbu darbā dardu dargo darit darma darot darts darva darvu darza darām darās darāt darīs darīt datne datni datnē datos datum datus datēt datņu daudz dauza davai daļai daļas daļām daļās dažai dažam dažas dažos dažus dažām dažās debit degli degot degtu degus degļa degļi degļu dejai dejas dejos dejot dejām dejās dekor delfi delle dello delnu delta deltu deltā delus dermā derēs derēt desas desām desās devai devas devis devos devām devās devāt deķis dfrac diega diegi diegs diegu diegā diena dienu dienā dienē dieva dieve dievi dievs dievu dikti diktē dildo dilst dingo diode diodi diožu diriģ dirst dirsā diska diski disko disks disku diskā divam divas divos divus divām divās diēta diētu diētā diļļu dižie dižās dobes dobja dobji dobju dobās dobēm dobēs dodam dodas dodat dodos dodot dodās dodžs dogma dogmu domaa domai domam domas domat domei domes domju domām domās domāt domēm domēs dorņi dosim dosjē dotas dotie dotos dotās dotēt dozas dozēt došos došot draft drama draud drava dravu dravā drazu drenu drift drogu drona drone droni drons dronu drosi droša droši drošo drošs drošu drošā druka druku drukā drupu druva druvā druzi druzu drāma drāmu drāmā drāna drānu drāzt drāšu drēbe drēbi drīzi drīzu drīzā drūma drūmi drūmo drūms drūmu drūmā dublē dubļi dubļu ducis dueli duelī dueta dueti duets duetu duetā dueļa dueļi dueļu dugas dujos dulla dullo dumja dumji dumjš dumpi dumpī dunci dungo dunču dupsi duras durvi dusas dusmu duāla duālo duālā dušai dušas dušām dušās dvaša dvašu dvīnī dvīņi dvīņu dzega dzegu dzeja dzeju dzejā dzels dzenā dzers dzert dzeru dzesē dzeņa dzeņi dzeņu dzied dzija dziju dzima dzims dzimt dzimu dzina dzini dzird dziru dzive dzivi dzivo dziļa dziļi dziļo dziļu dziļā dziļš dziņa dziņi dziņu dzēra dzēru dzēsa dzēst dzīru dzīst dzīti dzīts dzītu dzīva dzīve dzīvi dzīvo dzīvs dzīvu dzīvā dzīvē dzīļu dāmai dāmas dāmām dānis dārdi dārga dārgi dārgo dārgs dārgu dārgā dārka dārza dārzi dārzs dārzu dārzā dāsna dāsni dāsno dāsns dāsnu dāvās dāvāt dāņus dējot dēkas dēkām dēlam dēles dēlim dēlis dēliņ dēlus dēlēm dēsti dēstu dētas dēvēt dēļos dēļus dīgli dīgst dīgļa dīvai dīvas dīķim dīķis dīķos dīķus dūdas dūdām dūmos dūmus dūnas dūnām dūres dūrēm dūzis dūņas dūņām dūņās dūšas džeki džeks džeku džema džemu džeza džezs džezu džezā džina džins džinu džipa džipi džips džipu džudo edijs eesti eglei egles eglēm eiras eirām ejams ejiet ejoša ejošo ejošs ejošu ejošā elina elite eliti elitē elkus ellei elles elpai elpas elpot elīna emitē emīra emīrs emīru epoha eposa eposi eposs eposu eposā erots erzji erzju eseja eseju esejā eseri eseru esiet esita esoša esoši esošo esošs esošu esošā esība esību etapa etapi etaps etapu etapā etiķa etiķi etiķī etāna etāns etānu etīde etīdi etīžu evija ezera ezeri ezers ezeru ezerā ezīti eļlas eļļai eļļas eļļām eļļās eņges eņģel eņģes eņģēm ežiem facto faila faili fails failu failā faksa faksi fakss faksu fakta fakti fakts faktu faktā falla fallu fanam fanat fanka fanot fanus farsa farss farsu fauna faunu faunā feina feini feins fejas felis ferma fermu fermā ferus fetas fetiš fices figņa figņu fiksi fikso fiksē filca filci filcs filke filkē filma filmu filmā filmē firma firmu firmā firna fizik fiziķ fiška fišku flaga flava flizu flora floru florā flote floti flotē fluke flāmu flīsa flīze flīzu flīžu foajē fogta fogti fogts fogtu folka folks fonam fonda fondi fonds fondu fondā fonta fonti fonts fontu fontā fonus forma formu formā formē forta forte forti forts fortu fortā forša forši foršo foršs foršu foršā frakā frotē frāze frāzi frāzē frāžu frēze frēzi frēžu frīze frīzi frīzu fukši fāzei fāzes fāzēm fāzēs fēcēm fēcēs fīčas fīčām fūres gabro gadam gadas gades gados gadus gadās gaida gaidi gaidu gaili gaisa gaisi gaiss gaisu gaisā gaita gaitu gaitā gaiļa gaiļi gaiļu gaiša gaiši gaišo gaišs gaišu gaišā galaa galam galda galdi galds galdu galdā galli gallu galma galms galmu galmā galos galus galva galve galvo galvu galvā gamma gammu gammā ganos ganot ganās ganīt garai garam garas garda gardi gardo gards gardu gardā garie garos garso garus garāk garām garās garša garšo garšu garšā gatis gatve gatvi gatvē gaudo gaudu gauja gaume gaumi gaumē gaura gauri gaurs gauru gausa gausi gauži gavēt gazes gaļai gaļas geims geimu geimā geiša geišu gejus gidam gidei gides gigas ginka ginks glabā gleja gluda gludi gludo gluds gludu gludā gluži glāba glābj glābs glābt glāze glāzi glāzē glāžu glīta glīti glīts glītu glītā gmina gobas gobām godam godos godus godāt golfa golfs golfu golfā golus gongu gotus govij govis govju govīm grafa grafs grafu grama grami grams gramu gramā grata grauj graut grauž grava gravu gravā graša graši griba gribi gribu gribā gridu griez griež grifa grifi grifs grifu grila grili grils grilu grima grims grimt grimu grimā gripa gripi gripu griķi griķu grodi grodu grota groza grozi grozs grozu grozā groži grupa grupu grupā grupē gruti gruzd gruži gružu grābj grābt grāda grādi grāds grādu grāfa grāfi grāfs grāfu grāva grāvi grāvī grēda grēdu grēdā grēka grēki grēko grēks grēku grēkā grīda grīdu grīdā grīva grīvu grīvā grīņa grūbu grūst grūta grūti grūto grūts grūtu grūtā guaša gudra gudri gudro gudrs gudru gudrā gulbi gulda gulet gulst gulta gultu gultā gulēs gulēt gumus gurna gurni gurnu gurķa gurķi gurķu guvis guvām guzas guāra guļam guļas guļat guļot guļus gvano gādās gādāt gājis gājām gārni gārņa gārņi gārņu gārša gāršā gāzei gāzes gāzta gāzti gāzto gāzts gāztu gāztā gāzās gāzēm gāzēs gāzīs gāžas gāžot gēnos gēnus gļotu gļuki gļuko gļuks gļuku gļēvi gļēvs gļēvu gūlās gūsim gūsta gūsti gūsts gūstu gūstā gūtas gūtie gūtos gūtās gūzma gūzmu gūzmā gūžas gūžām haidu haiku halal halle halli hallē hanam hantu hanus haosa haoss haosu haosā harta hartu hartā hausu hennu herci hidro hifas hifām himna himnu himnā hindi hindu hitus hiēna hiēnu hlora hlors hloru hokej honda honti horda hordu hostu hroma hroms hromu hunta huntu huņņi huņņu hāras hītus ibisi ibiss ibisu ideja ideju idejā ieaug ieber iebāž ieceļ iedod iedos iedot iedur iedēj ieeja ieeju ieejā ieguļ iegūs iegūt ieies ieiet iekož iekša iekšu iekšā ielai ielam ielas ielec ielej ielām ielās iemet iemīl ienes ienāc ienāk iepīt iepūš ierok ieroč iesim iesit iesma iesmi iesmu iesnu iesāk iesēj iesēt iesūc ietek ietin ietur ietve ietvi ietīt ievas ieved iever ievij ievāc ievām ievēl ievēr iezim iezis ieēst ieņem iešūt iežos iežus igors iisti ikona ikonu ikonā ikrus ilgai ilgam ilgas ilgie ilgos ilgst ilgtu ilgus ilgāk ilgām ilgās iliem ilkni ilkņa ilkņi ilkņu imago imitē imāms imūni imūno imūns imūnā indes indie indēm inese ineta infor infos intel inuse ipaši irbes irbju irina irāņi irāņu isola itāli itāļi itāļu iuris ivars iveta izada izaug izber izbāž izbēg izcep izceļ izdeg izdev izdod izdos izdot izdur izdēj izdēt izeja izeju izejā izgāž izies iziet izira izjūk izjūt izkaļ izkāš izlas izlec izlej izlem izman izmet iznes iznāc iznāk izolē izpūš izrok izsit izsūc iztek iztur izved izvēl izzog izzūd izēda izīrē izķer izņem izšuj izšūt izžūt ižoru jabut jabūt jahta jahtu jaiet jakai jakas jakām jakās janka jardi jardu jarla jarls jarlu jauca jaucu jauda jaudu jaudā jauka jauki jauko jauks jaukt jauku jaukā jauna jauni jauno jauns jaunu jaunā jautā javas jašma jebko jebkā jebšu jezga jezgu jeņķu jodam jogai jogas jokam jokot jokus jomai jomas jomos jomām jomās jonam jonos jonus josla joslu joslā josta jostu jostā juaņu jucis jukas jukām jumis jumta jumti jumts jumtu jumtā jumus juras juris jurģe justu jutas jutis jutos jutām jutās jutīs juusu jāaug jābut jābēg jābūt jācep jācer jāceļ jādod jāguļ jāiet jājot jājūt jālec jālej jāmet jāmin jāmāk jāmīl jānes jānis jānāk jārod jārok jārēķ jāsit jāsāk jāsēj jāsēž jātic jātop jātur jāvar jāved jāver jāvāc jāzin jāķer jāņem jāšuj jāšus jēgai jēgas jēlas jērus jūdus jūdze jūdzi jūdžu jūklī jūrai jūras jūrām jūrās jūsma jūsmo jūsos jūtam jūtas jūtat jūtos jūtot jūtām jūtās jūtīs kaada kaadi kaads kaadu kadam kadas kadra kadri kadrs kadru kadrā kadus kaifs kaifu kaija kaiju kaila kaili kailo kails kailu kailā kaira kaisa kaite kaiti kaito kaitē kaišu kajas kakao kakas kakla kakli kakls kaklu kaklā kakta kakts kaktu kaktā kalka kalks kalna kalni kalns kalnu kalnā kalpa kalpi kalpo kalps kalpu kalta kalte kalti kalto kalts kaltu kaltā kaltē kalve kamer kamēr kanas kanna kannu kanoe kanti kanva kanāl kapam kapes kapos kapus kapāt kapēc kapļi kapņu karam karba karma karmu karog karos karot karpa karpu karst karsē karta karte karti kartē karus karšu kasei kases kasko kasta kaste kasti kastu kastē kasās kasēm kasēs katas katla katli katls katlu katlā katra katri katrs katru katrā kauja kauju kaujā kauko kaula kauli kauls kaulu kaulā kauna kauns kaunu kaunā kauri kausa kausi kauss kausu kausā kausē kavas kavēs kavēt kazai kazas kazām kaķim kaķis kaķus kaļķa kaļķi kaļķu kašķa kašķi kedas kedām keita kerni kečvu kkāda kkādi kkāds kkādu klaat klada klade kladi kladē klaja klaji klaju klajā klajš klana klani klans klanu klanā klapi klase klasi klasē klaču klaņa klaņi klašu klejo klepo klepu kleķa klibo klibs klija kliju klipa klipi klips klipu klipā kliķe kliķi klona kloni klons klonu kloķa kloķi kluba klubi klubs klubu klubā kluci klusa klusi kluso kluss klusu klusā klusē kluči kluču klāja klāji klājs klāju klājā klāni klāta klāti klāto klāts klātu klātā klēpi klēpī klēra klēti klēts klētī klīda klīst klūgu knapi knifi knifs knābi knābī koala koalu kobra kobru kodam kodes kodos kodus kodēt koine kojās kokam kokas kokle kokli kokos koksa koksu kokus kokļu kolas kolba kolbu kolbā komas kombo kompi kompl kompī konci konta konti konts kontu kontā kopaa kopai kopas kopne kopni kopnē kopta kopti kopts koptu koptā kopām kopās kopēt kopņu kores korim koris koros korta korti korts kortu kortā korus korķa korķi korķu korņu kosas kotēt koučs košas košie košos košus košāk košām košās kožot krabi kraha krahs krahu krama krams kramu krasa krasi krass krast krasu krasā krata krati krauj kraut krava kravu kravā kredo kremi kremu kreve krila krili krils krilu krist krita kritu kroga krogi krogs krogu krogā kroka kroku krona kroni kronu kronē kronī krosa kross krosu krosā kroņa kroņi kroņu krupi krusa krusu kruta kruti kruts kruķi krāja krāju krāmi krāmu krāna krāni krāns krānu krāpa krāpj krāpt krāsa krāso krāsu krāsā krāta krāču krēma krēmi krēms krēmu krēmā krēpu krīta krīts krītu krīva krīvs krīvu krīze krīzi krīzē krīžu krūka krūma krūmi krūms krūmu krūmā krūti krūts krūze krūzi krūzē krūšu kubam kubla kubli kubls kublu kuces kucēm kuili kuiļi kulta kulti kults kultu kultā kunga kungi kungs kungu kupla kupli kuplo kupls kuplu kuplā kupri kuraa kurai kuram kuras kurdi kurdu kurli kurls kurmi kuros kurpe kurpi kursa kursi kurss kursu kursā kursē kurta kurts kurtu kurus kurvi kurvī kurām kurās kurši kuršu kusīs kuvaa kuģim kuģis kuģos kuģot kuģus kuļot kuņģa kuņģi kuņģī kušķi kvasa kvass kvasu kvota kvotu kvēle kvēli kvēlo kvēls kvēlu kvēpi kvēpu kvīti kvīts kvīšu kādai kādam kādas kādos kādus kādām kādās kādēļ kājai kājam kājas kājām kājās kālab kāmis kāmja kāmji kāmju kāmēr kāpas kāpec kāpis kāpju kāptu kāpām kāpās kāpēc kāpņu kārba kārbu kārbā kāres kārpa kārpu kārta kārti kārto kārts kārtu kārtā kāršu kāsis kātam kātos kātus kāvās kāzas kāzām kāzās kēksa kēkss kēksu kļava kļavu kļust kļuva kļuvu kļūda kļūdu kļūme kļūmi kļūsi kļūst kļūtu kļūva kļūšu kņada kņadu kņaza kņazi kņazs kņazu kūdra kūdru kūdrā kūkai kūkas kūkām kūlas kūlim kūlis kūres kūtis kūtri kūtīm kūtīs kūļus labad labai labak labam labas labie labos labot labus labāk labām labās ladas lagas laida laide laidi laidu laidā laika laiki laiks laiku laikā laima laime laimi laims laimu laimē laipa laipu laist laiva laivu laivā laiza laižu lakai lakas lakot lakst lakām lakši lakšu lamas lampa lampu lampā lamām lamāt lapai lapas lapsa lapsu lapām lapās lasim lasis lasit lasot lasti lasām lasās lasāt lasīs lasīt latam latas latos latus latām lauka lauki lauks lauku laukā laupa laura lauri lauru lauva lauvu lauza lauzt lauči laužu lavas lazda lazdu lašus ldots lecam lecot ledum ledus ledāj leivi leivu leiši leišu lejam lejas lejot lejup lejāk lejām lelle lelli lemta lemti lemto lemts lemtu lenta lente lenti lentu lentā lentē lenšu lepna lepni lepno lepns lepnu lepnā letas letes letus leļļu leņķa leņķi leņķu leņķī licis lidos lidot lidzi lieci liecē liedz liegi liegs liegt lieka lieki lieko lieks liekt lieku liekā liela lieli lielo liels lielu lielā liene liens liepa liepu liesa liesu liesā lieta lieti lieto liets lietu lietā lietū lifta lifti lifts liftu liftā lijai lijas lijis likme likmi liksi likta likti likts liktu likum likām likās likšu lillā limba limes limfa limfu limfā linda linka linki links linku linkā linus linča liras lirām liste listi listē litra litri litrs litru litrā livru liānu ljoti lobās lobēt locīt lodei lodes lodēm lodēt logam logos logus lokam lokas lokos lokot lokus lokās lolot lomai lomas lomus lomām lomās lopus lorda lordi lords lordu lotes lozes ložai ložas ložām ložās ložņā ludza ludzu lugai lugas lugām lugās luksa lukss lukta lupas lupus luste lācim lācis lādes lādēm lādēt lāgas lāmas lāmām lāmās lāpas lāpām lāpīt lāsei lāses lāsta lāsti lāsts lāstu lāsēm lāvas lāčus lēcai lēcas lēcis lēcām lēkme lēkmi lēkta lēkts lēktu lēkāt lēkši lēmis lēnai lēnam lēnas lēnes lēnie lēnis lēnāk lēnām lēnās lēnēm lēpes lēsta lēsti lēsts lētas lētie lētos lētus lētāk lētām lētās lēņus līcim līcis līdza līdzi līgai līgas līgot līgām līgās līkas līkne līkni līknē līkņu līmes līmju līmēt līnis līste līvus līčos līčus līķim līķis līķus lūdza lūdzu lūgta lūgti lūgts lūgtu lūgšu lūkas lūkos lūkot lūkām lūpas lūpām lūpās lūrēt lūsim lūsis lūzīs lūšus lūžņi lūžņu magma magna maiga maigi maigo maigs maigu maigā maija maiji maijs maiju maijā maina maini mainu maisa maisi maiss maisu maisā maita maitu maitā maize maizi maizē maiņa maiņu maiņā majai majam majas majās makam makos makro maksa maksu maksā makus malai malas maldi maldu malka malks malku malta malti malto maltu maltā malus malvu malām malās mamma mammu manai manam manas manga mango mangu mania manim manis manna mannu mannā manos mansu manta manto mantu mantā manus manām manās manīm manīs manīt maori maoru mapei mapes mapju mapēm mapēs margo margu marka marku marli marta marts martu martā marķē marša maršs maršu maršā maršē marža masai masas maska masku maskā maskē masta masti masts mastu mastā masām masās masēt mates matos matot matus mauka mauku maura mauri mauru mazai mazak mazam mazas mazgā mazie mazos mazum mazus mazāk mazām mazās mačam mačos mačus maņas maņām medum medus medīt medņa medņi medņu meils meilu meita meitu meitā meiča meiču mekle meklē meles melis melna melni melno melns melnu melnā melos melot melus menca mencu menti mento ments mentu mesas meses meslu mesta mesti mesto mests mestu mesēs metam metas meteo metis metos metot metra metri metro metrs metru metrā metus metāl metās metīs meģes meģēm mežam mežos mežus miega miegs miegu miegā miera miers mieru mierā miesa miesu miesā mieta mieti miets mietu mieži miežu migas migla miglu miglā migrē mijai mijas mijās mikro mikss miljo milti miltu milzi milzu milža milži milžu minot minēt mioma mionu mirdz mirgo miris mirsi mirst mirtu miršu misas mises misis mitas mitis mitra mitri mitro mitrs mitru mitrā mizas mizot mizām mizās miņas mlapa mocis mocīt modei modem modes modri modrs modās mokas mokos mokām mokās mokša mokši mokšu molos monde mondo montē morfa morga morgu morgā mošķi mošķu mucas mucām mucās muita muitu muitā muiza muiža muižu muižā mulla multi mulča mulču mundi murat murdu murga murgi murgo murgs murgu murgā musli mutei mutes mutēm mutēs muusu muļķa muļķe muļķi muļķu mušai mušas mušām mācas mācos mācot mācām mācās mācēs mācēt mācīs mācīt mājai mājam mājas mājot mājup mājām mājās mākam mākas mākat māksl mākts mālus māmiņ mānīt māori māris mārka mārku mārša māsai māsas māsiņ māsām mātei mātes mātēm mēdza mēdzu mēlei mēles mēlēm mēlēs mēmās mēram mērce mērci mērcē mērim mēris mērot mērus mērču mērīs mērīt mērķa mērķi mērķu mērķē mērķī mēsli mēslo mēsls mēslu mētra mētru mētāt mīcīt mīkla mīklu mīklā mīkta mīlam mīlas mīlat mīlot mīlēs mīlēt mīnas mīnus mīnām mītam mītne mītni mītnē mītos mītus mītņu mīļam mīļas mīļie mīļos mīļus mīļāk mīļām mīļās mūkam mūkus mūrim mūris mūros mūrus mūrēt mūsos mūzai mūzas mūzik mūziķ mūzām mūžam mūžos nabas nabla nafta naftu naftā nagam nagla naglu nagos nagus naida naids naidu naidā naiva naivi naivo naivs naivu naivā nakte nakti nakts naktī nakšu namam namos namus nardi naski nasta nastu nauda naudu naudā navas navās nazis našķi našķu nažus neaug nebij nebus nebēg nebūs nebūt necer neceļ necik nedeg neder nedod nedos nedot neeju neesi neesu neguļ negūs neies neiet nejau nejūt nekaa nekad nekam nekas nekož nekur nelec nelīp nelīs nemak nemaz nemet nemin nemāk nemīl nenes nenāk neona neons nepie nepūš nerod nerok nerva nervi nervs nervu nerūp nesam nesas nesat nesen nesis nesit nesmu nesot nesta nesti nesto nests nestu nestā nesāc nesāk nesāp nesās nesāt nesēž nesīs netek netic netik netop netto netur netīk nevar neved nevis neviļ nevāc nezin nezog nezūd neēda neēdu neēst neķer neļķu neņem nieka nieki nieks nieku niere nieri nieru nieze niezi nigra nikna nikni nikns niknu niknā nimfa nimfu nirst niķis nišas nišām nišās nobis nobāl noceļ nodeg noder nodes nodod nodos nodot nodro nodur noguļ nogāž noies noiet nokia nokož nokāš nolec nolej nolād nomai nomas nomet nomos nomāc nomās nomāt nonāc nonāk noras norij noris norit norma normu normā norok norāj norās norīt nosit notas notek notic notij notis notur notīm notīs novad noved noveļ novus novāc novēl nozog nozūd noēda noēst noķer noņem nožūt nulle nulli numur nuova nupat nuļļu nācis nācām nācās nākam nākas nākat nākot nākoš nāksi nāktu nākās nākšu nāras nāsis nāsīm nāsīs nātre nātru nāvei nāves nāvēm nēsmu nēsāt nīkst nūjas nūjot nūjām oboja oboju odere oderi odiem odzes odzēm ofisa ofisi ofiss ofisu ofisā ogles oglēm ogres oguzu oikos okapi okera oktas okupē oliņu olīvu omega omāri omārs omāru omīte opera operu operā operē opija opijs opiju oponē opusa opusi opuss opusu orbis ordas orāli orālo orāls orālā osiem ostai ostas ostām ostās otavu otiņa otiņu otrai otram otras otrie otros otrus otrām otrās ovāla ovāli ovāls ovālu ovālā ozola ozoli ozols ozolu ozolā ozona ozons ozonu oāzes oāzēm oāzēs oļiem ošiem ožamo paari pabāž pabūt pacel paceļ padod padot pagūt paies paiet paiku pajas pakal pakar pakas pakaļ pakta pakts paktu paktā pakām pakās palma palmu palos palsi pamat pamaz pamet pamāj panda pandu panes panka panki panks panku panna panno pannu pannā panta panti pants pantu pantā panāk papes parak paras paris parka parki parks parku parkā paroc parāk parīt pasam pasas pasei pasen pases pasta paste pasts pastu pastā pasēm pasēs pasūt patio patur patīc patīk pauda pauls pauni paura paust pauze pauzi pauzē paužu paver pavēl pavīd pazem pazib pazīs pazīt pazūd paēdu paēnā paēst paģēr paķer paņem pašai pašam pašas pašos pašus pašām pašās pelde peldi peldu peldē pelei peles pelna pelni pelnu pelēm penis perma perms perēt pesto peļķe peļķē peļņa peļņu peļņā pežas piano picai picas picām pieci piecu pieej piena piens pienu pienā piepe piere pieri pierē piesi piesl pieši pikas pikti pikām pilda pildi pildu piles pilij pilis pilna pilni pilno pilns pilnu pilnā pilot pilti pilīm pilīs pinas pions pirka pirks pirkt pirku pirma pirmo pirms pirmā pirti pirts pirtu pirtī piršu piķis piņņu placi placī planē plata plate plati plato plats platu platā platē plača plaša plaši plašo plašs plašu plašā pleca pleci plecs plecu plecā pledi pledu pleķi plici plika pliki pliko pliks pliku plits pliči plosa plova plovs plusa plusi pluss plusu plusā plāna plāni plāno plāns plānu plānā plāta plāts plāšā plēsa plēst plēve plēvi plēvē plīsa plīst plīti plīts plītī plīvo plīša plīšu plūca plūda plūdi plūdu plūkt plūme plūst podam podos podus pogai pogas pogām pohas polam polis polka polos polus pompu pončo poras porno porta porti ports portu portā porām porās posma posmi posms posmu posmā posta posti posts postu postā posās potes potēm potēt pozas pozām pozās pozēt poēma poēmu poēmā poļus pošas prasa prasi prast prasu prata pratu prces prece preci precu precē prese presi presē pretī preču priek prima primo progr progu promo prosu proti proto protu prove provi proza prozu prozā prāmi prāta prāti prāto prāts prātu prātā prāva prāvi prāvs prāvu prāvā prūši prūšu psihe psihi psiho psihē pudus puika puiku puisi puisī puiša puiši puišu pukst pulcē pulka pulki pulks pulku pulkā pulpa pulsa pulss pulsu pulsē pulti pults pultī pulēt pumas pumpa pumpi pumpu pumpē pumām punci puncī punkt punča pupas pupus pupām purna purni purns purnu purva purvi purvs purvu purvā pusei puses pusēm pusēs putam putas putna putni putns putnu putot putra putru putrā putām putās puves puzle puzli puķei puķes puķēm puštu pušķa pušķi pušķu pužļu pākšu pālis pārak pārim pāris pāros pārus pārāk pāvam pāļus pēcāk pēdai pēdas pēdām pēdās pērku pērle pērli pērlē pērno pērnā pērļu pētot pētām pētīs pētīt pīkst pīlei pīles pīlēm pīpes pīpju pīpēt pītas pītie pītos pīķis pīšļi pīšļu pļauj pļaut pļava pļavu pļavā pļāpā pļāva pūcei pūces pūcēm pūkas pūkām pūlas pūles pūlim pūlis pūlēm pūrus pūsli pūtas pūtīs pūzni pūznī pūķim pūķis pūķus pūļus pūšot pūšļa pūšļu pūžņa radam radas radis rados radot radus radām radās radāt radīs radīt radžu ragam ragos ragus raiba raibi raibo raibs raibu raibā raida raisa raita raiti raits raitu raitā raižu rajas rajon rakst rakta rakts raktu rampa rampu ranga rangs rangu rangā rančo rapsi rapša rapšu rasas rasei rases rasta rasti rasts rastu rasēm ratio ratos ratus rauda raudi raudu rauga raugi raugs raugu rauši raušu ravēt ražai ražas ražos ražot ražām reaģē redze redzi redzu rehau reida reidi reids reidu reidā reiha reihs reihu reihā reiki reisa reisi reiss reisu reisā reize reizi reizē reižu rejas reksa rekss rekur remdē renes rente renti rerum resna resni resno resns resnu resnā reste resti restu retam retas retie retos retro retus retāk retām retās rezgi rezgu reāla reāli reālo reāls reālu reālā reņģe reņģu režģa režģi režģu režģī ribas ribām ribās riebj riepa riepu riepā rieta rietu rieva rievu rifos rifta rifus rigas rijas rijām rikšu rinda rindu rindā ringa rings ringā ripai ripas ripot ripām ripās riska riski risks risku riskē risus rites ritma ritmi ritms ritmu ritmā ritot ritēs ritēt riāls riņķa riņķi riņķo riņķu riņķī robež robur robus rodam rodas rodeo rodot rodās rokai rokam rokas rokot rokām rokās romas romba rombs rombu romeo romān rondo ronim ronis rosme rosmi rosās rotai rotas rotām rotās rotāt rotēt rozes rozēm roņus rubki rubli rubļa rubļi rubļu rudas rudzi rudzu rudām rudās rukši rulli rullo rullē rullī rumba rumbu rumbā rumpi runaa runai runas runat runci rungu runām runās runāt runča runči rupja rupji rupjo rupju rupjā rupjš rutki rutku ruļļa ruļļi ruļļu rādio rādot rādām rādās rādīs rādīt rāmim rāmis rāmja rāmji rāmju rāpot rāpus rātei rātes rātni rāvās rētas rētām rēzus rīgas rīkam rīkle rīkli rīklē rīkos rīkot rīkus rīkšu rīmju rīsos rīsus rītam rītos rītus rīves rūdas rūdām rūdās rūgst rūgta rūgti rūgto rūgts rūgtu rūgtā rūnas rūnām rūpes rūpju rūpēm rūpēs rūsas rūsēt rūtis rūtīm rūķis rūķus saada saaug saber sabož sacer saceļ sacīs sacīt sadeg sader sadod sadot saiet saime saimi saimē saira sairt saita saite saiti saits saitu saitā saitē saišu sajūk sajūt sakam sakar sakas sakat sakne sakni saknē sakot sakož sakta saktu sakuļ sakām sakās sakāt sakņu sakši sakšu salai salam salar salas salda saldi saldo salds saldu saldā salej salmi salmu salna salni salnu salsa salst salsu salto salām salās salīp samaļ samba sambo samet samta samts samtu samus sanes santa sanāk saost sapni sapnī sapņa sapņi sapņo sapņu sarak sarec sarga sargi sargs sargu sargā sarma sarmu sarūk sarža sasit satek satur satīt sauca saucu sauja sauju saujā sauks saukt saukā saule sauli saulē sauna saunu saunā sausa sausi sauso sauss sausu sausā sautē savaa savai savam savas saveļ savij savos savus savāc savām savās sazin saķer saņem sašuj sašūt scēna scēnu scēnā sebum secen sedis sedli sedlu sedza segai segas seglu segta segti segto segts segtu segām segās seifa seifi seifs seifu seifā seima seims seimā sejai sejas sejām sejās sekas sekla sekli seklo sekls seklu seklā sekmē sekos sekot seksa seksu seksā sekta sektu sekām sekās senai senas senie senos sensu senus senāk senām senās senča senči senču sepse septa septu seram serbi serbs serbu serde serdi serve servi servo servē seska seski sesks sesku sesto sestā setas setos setus sevim sevis sevīm sešas sešos sešus sešām sešās sfēra sfēru sfērā shēma shēmu shēmā sidra sidrs sidru sidām sieku siena siens sienu sienā siera sieri siers sieru sierā sieta sieti siets sietu sietā sieva sievu sievā sigma sijai sijas sijām sikhi sikhu silda siles silos silta silti silto silts siltu siltā simta simti simto simts simtu simtā simum singl sinus sirdi sirds sirdī sirga sirma sirmi sirmo sirms sirmu sirmā sirot sirpi siržu sista sisti sists sistu sistā sitas sitis sitot sitās sitīs siļķe siļķi siļķu skaid skait skala skalo skalu skalā skani skapi skapī skara skars skart skarā skata skate skati skats skatu skatā skatē skauž skava skavu skaļa skaļi skaļo skaļu skaļā skaļš skaņa skaņu skaņā skenē skeču skice skici skicē skiet skinu skiti skits skitu skiču skola skolu skolā skopa skopi skops skoti skots skotu skoču skuju skumt skuķi skāba skābe skābi skābo skābs skābu skābā skābē skāde skādi skāra skūta slams slauc slava slavu slavē slaņu sleja sleju slejā slidu slima slimi slimn slimo slims slimu slimā sloga slogs slogu sloka sloku sloss slota sloti slots slotu slotā slāni slānī slāpē slāvi slāvu slāņa slāņi slāņu slēdz slēgs slēgt slēpa slēpj slēpo slēpt slēģi slīgt slīpa slīpi slīpo slīps slīpu slīpā slīpē slūžu smacē smaga smagi smago smags smagu smagā smaka smako smaku smelt smird smoga smogs smogu smuka smuki smuko smuks smuku smukā smēde smēdē smēre smēri smērē smēķē smīnu snauž snieg sniga snigs snigt snuķa snuķi snīpi sodam sodas sodot sodus sodīs sodīt sofas softu sojas sokas solim solis solos solot solus solās solīt somai somas somus somām somās sorbi sorbu sorgo soula soģis soģus soļos soļot soļus spala spals spalu spama spams spamu spara spars sparu sparā speci spele spers spert speķa speķi spice spici spicu spicē spied spiež spina spins spinu spoka spoki spoks spoku spole spoli spolē sporu spoļu spoža spoži spožo spožs spožu spožā spura spuru spāni spāre spāri spāru spāņa spāņi spāņu spēja spēji spēju spējā spēka spēki spēks spēku spēkā spēle spēli spēlē spēra spēsi spētu spēļu spēšu spīle spīti spīts staba stabi stabs stabu stabā stara stari staro starp stars staru starā stats statu stava stavu stavā steka steks steku stekā stepa stepe stepi stepē stiga stigu stika stila stili stils stilu stilā stiķi stopu storu studē stumj stumt stura stāda stādi stāds stādu stāja stāju stājā stāva stāvi stāvo stāvs stāvu stāvā stāža stāžs stāžu stāžā stēla stīga stīgo stīgu stīpu stīva stīvi stīvs stīvu stūma stūra stūre stūri stūru stūrē stūrī sugai sugas sugām sugās suiti suitu sukas sulai sulas sulām sulās summa summu summā summē sunim sunna super suņus svara svari svars svaru svarā svece sveci sveic sveru sveču sveķi sveķu sveša sveši svešo svešs svešu svešā svina svini svins svinu svira sviru svēra svērt svēta svēti svēto svēts svētu svētā svētī svīre svīru svīst svīta svītu svītā sācis sādža sādžu sādžā sāgas sāgām sāgās sākam sākas sākat sākot sāksi sākta sākti sākto sākts sāktu sāktā sākām sākās sākāt sākšu sālim sānis sānos sānus sāpes sāpju sāpēm sāpēs sāpēt sārma sārmi sārms sārmu sārta sārti sārto sārts sārtu sārtā sāļas sāļie sāļos sāļus sāļās sāņus sēdei sēdes sēdus sēdās sēdēm sēdēs sēdēt sējai sējas sējot sēkla sēkli sēklu sēkļa sēkļi sēkļu sēnei sēnes sēnēm sēnēs sēram sēras sērfo sērga sērgu sērot sērām sērās sētai sētas sētām sētās sēņot sēžam sēžas sēžat sēžot sīgas sīkas sīkie sīkos sīkus sīkāk sīkām sīkās sīlim sīlis sīvas sīvām sīvās sķiet sūcas sūces sūcot sūdos sūdus sūkli sūkni sūknē sūkāt sūkļa sūkļi sūkļu sūkņa sūkņi sūkņu sūnas sūnām sūnās sūras sūrās sūtam sūtat sūtne sūtni sūtot sūtām sūtīs sūtīt sūtņa sūtņi sūtņu taada taadi taads taadu tablo tadas tadus tadēļ tagad tagat tagus tahta taiga taigu taigā taino taisa taisi taisu tajos tajām tajās takai takas taksi takta takti takts taktu taktī takām takās takši takšu talak talka talks talku talkā talsu talāk tango tanka tanki tanks tanku tankā tante tanti tanīs tapas tapat tapis taptu tapām tapāt tapēc taras tartu tases taujā tauki tauku taupa taura taure tauri taurs tauru tauta tautu tautā tauvu tavai tavam tavas tavos tavus tavām tavās tecēt tehno teica teici teicu teika teiks teikt teiku tekot tekst tekņu teles telpa telpu telpā telti telts teltī telšu temas tempa tempi temps tempu tempā tenku tenta tenti tents tentu tepat termo termu testa testi tests testu testā testē tevim tevis teļus ticam ticat ticis ticot ticēs ticēt tieku tiesa tiesi tiesu tiesā tieva tievi tievo tievs tievu tievā tieša tieši tiešo tiešs tiešu tiešā tikai tikko tikla tikli tikls tiklu tikos tiksi tikta tikts tiktu tikām tikās tikāt tikšu tilde tildi tilla tilta tilti tilts tiltu tiltā tinis tinte tinti tipam tipos tipus tirdz tirgi tirgo tirgu tirgū titri titru titul tizla tizli tizls tizlu tjipa tobiš togad tomēr tonim tonis tonna tonnu tonnā topam topim topos topot topus torda torni tornī torsa torsu torte torti torņa torņi torņu tosts tostu točka točku točkā točna toņos toņus traci traka traki trako traks traku trakā trani trans tranu trapa trapu trase trasi trasē trašu treka treks treku trekā trenē trešo trešā triba tribu triec triju trika triki triko triks triku troni tronī tropi tropu trose trosi trosu troņa trošu truba trubu trula truli trulu trupa trupe trupi trupu trupā trusi truša truši trušu trāpa trīce trīci trūce trūka trūks trūkt tubas tugra tuklo tukša tukši tukšo tukšs tukšu tukšā tulka tulki tulko tulks tulku tulpe tulīt tumba tumsa tumsu tumsā tumša tumši tumšo tumšs tumšu tumšā tunci tunča tunči tunču tupus tupēt turam turas turat turbo turki turks turku turos turot turpu turās turēs turēt tusēt tutsi tutsu tuvam tuvas tuvie tuvos tuvus tuvāk tuvām tuvās tušas tvana tvert tvnet tvēra tvīti tvīts tvītu tādai tādam tādas tādos tādus tādām tādās tādēl tādēļ tālab tālak tālas tālie tālos tālus tālāk tālām tālās tālēs tāmes tāmju tāmēm tāpat tāpec tāpāt tāpēc tārpa tārpi tārps tārpu tātad tējai tējas tējām tējās tēlam tēlos tēlot tēlus tēmai tēmas tēmām tēmās tēmēt tērpa tērpi tērps tērpu tērpā tērēs tērēt tēstu tētim tētis tētus tēvam tēvus tēzei tēzes tēzēm tības tīkla tīkli tīkls tīklu tīklā tīnes tīnis tīrai tīram tīras tīrie tīros tīrot tīrus tīrām tīrās tīrīt tīšas tīšām tūdaļ tūjas tūkst tūliņ tūlīt tūpļa tūrei tūres tūrēm tūrēs tūska tūsku ubaga ubagi ubago ubags ubagu udeni udens uguni uguns ugunī uguņu ukazs ukazu uldis ultra ulānu unces upeņu upura upuri upuru upurē upurī upīte upīti upītē upīšu urbis urbja urbji urbju urinē urlas urlām urnas urnām urāna urāns urānu urīna urīns urīnu urīnā uzaci uzacs uzacu uzaug uzber uzbur uzceļ uzdod uzdos uzdot uzguļ uziet uzlec uzlej uzlīs uzmet uznes uznāk uzpūš uzrok uzsit uzsāc uzsāk uzsūc uztic uztur uzvar uzved uzver uzzin uzēst uzķer uzņem uzšūt vadam vadis vados vadot vadus vadām vadās vadāt vadīs vadīt vagas vagām vagās vaicā vaida vaidi vaiga vaigi vaigs vaigu vaigā vaina vaino vainu vaira vairo vairs vairā vajag vajāt vakar vakas vakām valda valde valdi valdz valdē valim valis valka valks valku valkā valni valnī valod valsi valst valsī valts valči valša valžu vanna vannu vannā vanšu varai varam varas varat varda varde vardi vards vardu vardā varen vares variē varot varti vartu varza varzu varāk varām varāt varēs varēt varžu vasas vaska vaski vasks vasku vaskā vates vatos vaļas vaļus vaļņa vaļņi vaļņu važas važām važās vdots vecai vecam vecas vecie vecim vecis vecos vecus vecām vecās vecīt vedam vedat vedis vedni vednī vedot vedām vedīs vedņa veica veicu veida veidi veido veids veidu veidā veiks veikt velas velis velku vella vells velme velmi velna velni velns velnu velos velta velti veltu veltī velve velvi velvē velāk velšu vendi vendu venge venta vepsu veras verba verga vergi vergs vergu verot versa verts verķi vesta veste vesti vests vestu vestē večes večus veļai veļas vibro vibrē vicas vidam videi vides vidum vidus vidēm vidēs vieda viedi viedo vieds viedu viedā viela vielu vielā viena vieni vienk vieno viens vienu vienā viesa viesi viesn viest viesu vieta vietn vietu vietā vijas vijās vilci vilis vilka vilki vilks vilkt vilku villa ville villu villā vilna vilni vilnu vilnā vilnī vilto viltu vimba vimbu vinai vinam vinas vinja vinji vinjs vinju vinnē vinus vinča vinču viola viras vircu virmo virpa virsa virsu virsū virve virvi virza virši viršu visai visam visas visis visos vissu vista vistu visur visus visām visās vitro vizla viļas viļķi viļņa viļņi viļņu viņai viņam viņas viņos viņus viņām viņās viņča volti voltu volvo vords vraka vraki vraks vraku vācam vācis vācot vājai vājas vājie vājos vājus vājāk vājām vājās vākam vākos vākta vākti vākts vāktu vākus vāles vārda vārdi vārds vārdu vārdā vārga vārgi vārgs vārna vārnu vārot vārpa vārpu vārti vārtu vārās vārīt vāzes vāzēm vāzēs vēdas vēdām vēdās vējam vējos vējus vēlai vēlak vēlam vēlas vēlme vēlmi vēlmē vēlos vēlot vēlāk vēlās vēlēs vēlēt vēnas vēnām vēnās vēris vēros vērot vērpa vērpj vērpt vērsa vērsi vērst vērta vērti vērto vērts vērtu vērtā vērtē vērās vērša vērši vēršu vēsas vēsma vēsmu vēsos vēsta vēsti vēsts vēstī vēsāk vēsām vēsās vētra vētru vētrā vētīt vēzim vēzis vēžus vīles vīlos vīlās vīlēm vīnam vīnus vīram vīrus vītne vītni vītņu vīzai vīzas vīzām vīģes zagli zagta zagti zagto zagts zagtu zagļa zagļi zagļu zaigo zaimo zales zamša zanrs zapte zapti zaram zarna zarnu zarnā zaros zarus zaudē zaķim zaķis zaķus zaļai zaļam zaļas zaļie zaļos zaļus zaļāk zaļām zaļās zebra zebru zelli zelta zelti zelts zeltu zeltā zemai zemam zemas zemei zemes zemie zemju zemos zemus zemāk zemām zemās zemēm zemēs zeķes zeķēm zeķēs zeļļi zeļļu zieda ziede ziedi ziedo zieds ziedu ziedā ziema ziemo ziemu ziemā zilai zilam zilas zilbe zilbi zilbē zilie zilos zilus zilām zilās zinam zinas zinat zinis zinot zinām zinās zināt zirga zirgi zirgs zirgu zirgā zirņa zirņi zirņu zivij zivis zivju zivīm zivīs zizli ziņai ziņas ziņos ziņot ziņām ziņās ziņģe ziņģu zižļa zlots zlotu znota znots znotu zobam zobos zobus zodam zogot zogus zolei zoles zolēm zonai zonas zonde zondi zonām zonās zonžu zorro zosij zosis zosīm zudis zudīs zumbu zupai zupas zupām zupās zustu zutis zušus zvana zvani zvans zvanu zveja zvejo zveju zvejā zvēra zvēri zvērs zvēru zvīņu zālei zāles zālēm zālēs zārka zārki zārks zārku zārkā zāģim zāģis zāģus zāģēt zēnam zēnus zīdīt zīles zīlēm zīlēt zīmei zīmes zīmju zīmēm zīmēs zīmēt zīžot zūdot ābece ābeci ābele ābeli ābeču ābeļu ābola āboli ābols ābolu ābolā ādere āderu ādiņa ādiņu āksti āksts ākstu āmtes āmura āmuri āmurs āmuru āmuļu ānusi āpsim āpsis ārdās ārija āriju ārpus ārsta ārste ārsti ārsts ārstu ārstē ārēja ārēji ārējo ārējs ārēju ārējā ārīgi āsiem ātrai ātram ātras ātrie ātros ātrus ātrāk ātrām ātrās āzija āķiem āķīti āķīši āķīšu āžiem čakla čakli čaklo čakls čaklu čakra čakru čalas čalim čalis čatam čaula čaulu čaulā čehus čekai čekas čekus čella čells čellu čempi čempī četri četru čilli čipsi čipsu čipus čipši čukst čukči čukču čupas čurāt čārtā čības čībām čībās čīkst čūlas čūlām čūska čūsku ēdama ēdami ēdamo ēdams ēdamu ēdamā ēdien ēdiet ēdusi ēduši ēdāji ēdājs ēdāju ēdīsi ēdīšu ēnoja ērces ērcēm ērgli ērgļa ērgļi ērgļu ēriku ērtai ērtam ērtas ērtos ērtus ērtāk ērtām ērtās ēsmas ētera ēteri ēters ēteru ēterā ēterī ētika ētiku ētikā ēvele ēzeli ēzeļa ēzeļi ēzeļu ēšana ēšanu ēšanā ģemze ģilde ģildi ģildē ģilžu ģinti ģints ģintī ģinšu ģipsi ģipsī ģipša ģirts ģērbj ģērbt ģīmis ģīmja īkšķa īkšķi īkšķu īlens īpaša īpaši īpašn īpašo īpašs īpašu īpašā īriem īrija īrijā īrisa īrisi īriss īrisu īrēja īrēto īrēts īrētu īrētā īsais īsajā īsiem īstai īstam īstas īstie īstos īstus īstām īstās īsuma īsumu īsumā īsāka īsāki īsāko īsāks īsāku īsākā ītājs ķauķi ķauķu ķeksi ķelti ķeltu ķemme ķemmi ķepas ķepām ķepās ķeras ķeros ķerot ķerra ķerru ķerti ķerts ķertu ķetnā ķeģis ķildu ķirbi ķirsi ķirši ķiršu ķēdei ķēdes ķēdēm ķēdēs ķēros ķērās ķēvei ķēves ķēvju ķēvēm ķēķis ķīlas ķīlis ķīmij ķīmiķ ķīnas ķīris ķīsis ķīķis ļauju ļauna ļauni ļauno ļauns ļaunu ļaunā ļauts ļautu ļauži ļaužu ļooti ļāvis ļāvos ļāvām ļāvās ņemam ņemas ņemat ņemot ņemsi ņemta ņemti ņemto ņemts ņemtu ņemās ņemšu ņencu ņēmis ņēmām ņēmās šacha šadas šaham šahta šahtu šahtā šajos šajās šalle šalli šalti šamie šanai šanas šanās šarma šarms šarmu šaubu šaura šauri šauro šaurs šauru šaurā šauts šautu šefam šeiha šeihs šeihu šeika šelfa šelfs šelfā šerpu šifra šifrs šifru šifrē šinas šinīs šitam šitas šitie šitik šitos šitās šiīti šiītu škiet šmuce šogad šokēs šokēt šorti šorīt šovam šovos šovus špats špici špics špicu štaba štata štati štats štatu štatā štāba štābi štābs štābu štābā šujot šurpu šuves šuvju šuvēm švaka švaki švaks švābu šādai šādam šādas šādos šādus šādām šādās šāvis šķelt šķiet šķira šķiro šķirs šķirt šķiru šķirā šķist šķita šķēle šķēli šķēpa šķēpi šķēps šķēpu šķēru šķērē šķība šķībi šķībs šķību šķīra šķīst šķīvi šķīvī šķūni šķūnī šķūņa šķūņi šļuku šņabi šņoru šūnai šūnas šūnām šūnās šūtas šūtām ūbele ūbeļu ūdele ūdeli ūdeni ūdens ūdenī ūdeļu ūdeņa ūdeņi ūdeņu ūdram ūdris ūnija ūniju ūnijā ūsiņu žanna žanra žanri žanrs žanru žanrā žaunu žesta žesti žests žestu žigli žogam žogus žokli žoklī žokļa žokļi žokļu žoržs žulti žults žultī žurka žurku žāklē žāvas žāvēt žēlot žīdus";
+/* VARDULIS-WORDS:END */
+// ---------- VĀRDULIS (5 burtu vārda minēšana) ----------
+const V_ANSWERS_RAW = "vārds vieta laiks grupa darbs diena klubs bērns liels gulta veids pāris ciems ezers spēle jauns parks nakts skats lampa sirds avots filma skola nauda dzīve karte tiesa maksa ledus muiža posms summa forma maiņa plāns balva telpa krāsa lieta kārta pirts fonds spēks meita svars tīkls banka balss ārsts ideja kuģis sieva gaiss tilts kauss kaķis klase kalns dārzs galva stils tauta vēlme koris fakts uguns valde pasts cilts risks ieeja vidus īpašs kauja kungs pilns pulks cikls disks solis grozs plīts saite jauda viela melns prece putns saule krīze reize mamma likme trase josla avīze simts firma opera ozols stāvs purvs peļņa lācis kurss medus lauks zirgs gatve dzeja galds kļūda grīda kauns miers rinda silts drošs piens konts jumts skaņa migla katls amats prāts siena biezs smags plats ziema vista vētra krēms dievs garša norma dīķis dēlis vilks bumba drāma krūts burts bilde arēna laime gaita brūns zelts brīvs kaste maska tonis grēda sauna grāds prese himna aplis siers maize gudrs zvans griba vaina lapsa flote kakls redze seifs manta lifts zieds sauss rāmis puika kauls krogs miegs upīte jauks aleja plēve mīkla vārna fails tētis marka grūts būtne krava pults tukšs saime lauva tumšs dziļš josta sfēra nafta gaišs reiss nulle ikona temps tērps laiva dārgs zaķis čūska velns mūris ritms varde riepa klēts slims stūre stars smaka mērce frāze slava kluss iezis talka birža šaurs mitrs cirks metrs ciets vilna pērle krusa maigs villa bērzs darīt lasīt runāt zināt domāt pirkt sekot vadīt saukt būvēt turēt minēt gulēt lidot ceļot dzert rādīt ticēt mīlēt glābt cerēt sēdēt mācīt dejot zīmēt tīrīt elpot barot ābols";
+const V_LETTERS = "aābcčdeēfgģhiījkķlļmnņoprsštuūvzž";
+const V_ROWS = ["eērtuūiīop", "aāsšdfgģh", "jkķlļzžcč", "⏎vbnņm⌫"];
+const V_WIN = ["Ģeniāli!", "Lieliski!", "Iespaidīgi!", "Labi!", "Nav slikti!", "Uff, izdevās!"];
+const V_STATS_KEY = "vardulis.stats.v1";
+const V = {mode: "daily", answer: null, day: null, rows: [], cur: "", done: false, won: false, busy: false};
+
+const vAnswers = [...new Set(V_ANSWERS_RAW.split(" "))].filter(w => [...w].length === 5);
+const vAllowed = new Set([...VARDULIS_WORDS.split(" "), ...vAnswers]);
+const vOrder = (() => { // fiksēta secība — atbildes neatkārtojas, kamēr nav iziets viss saraksts
+  const a = vAnswers.slice().sort();
+  let seed = 0; for (const ch of "VĀRDULIS") seed = (seed * 31 + ch.codePointAt(0)) >>> 0;
+  const r = () => { seed = (seed + 0x6D2B79F5) >>> 0; let t = seed; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+  for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+  return a;
+})();
+
+// Vērtē minējumu: 2 = īstajā vietā, 1 = vārdā ir, bet citur, 0 = nav. Atkārtotus burtus skaita godīgi.
+function vScore(guess, answer) {
+  const g = [...guess], a = [...answer], res = Array(5).fill(0), left = {};
+  for (let i = 0; i < 5; i++) {
+    if (g[i] === a[i]) res[i] = 2;
+    else left[a[i]] = (left[a[i]] || 0) + 1;
+  }
+  for (let i = 0; i < 5; i++) {
+    if (res[i] === 0 && left[g[i]]) { res[i] = 1; left[g[i]]--; }
+  }
+  return res;
+}
+
+const vStore = {
+  get(k, f) { try { const r = localStorage.getItem(k); return r ? JSON.parse(r) : f; } catch (e) { return f; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* krātuve nav pieejama */ } }
+};
+
+function vStart(mode) {
+  V.mode = mode; V.cur = ""; V.busy = false;
+  if (mode === "daily") {
+    V.day = TUVU.dayKey();
+    V.answer = vOrder[((TUVU.dayNumber() - 1) % vOrder.length + vOrder.length) % vOrder.length];
+    const saved = vStore.get("vardulis.day." + V.day, null);
+    V.rows = saved ? saved.rows : [];
+  } else {
+    V.answer = vAnswers[Math.floor(Math.random() * vAnswers.length)];
+    V.rows = [];
+  }
+  V.won = V.rows.includes(V.answer);
+  V.done = V.won || V.rows.length >= 6;
+  $("#v-tab-daily").setAttribute("aria-selected", String(mode === "daily"));
+  $("#v-tab-free").setAttribute("aria-selected", String(mode === "free"));
+  $("#v-meta").textContent = mode === "daily" ? "VĀRDULIS #" + TUVU.dayNumber() : "Brīvā spēle";
+  vToast("");
+  vRender();
+}
+
+function vSave() {
+  if (V.mode === "daily") vStore.set("vardulis.day." + V.day, {rows: V.rows});
+}
+
+function vRender(revealRow = -1) {
+  const grid = $("#v-grid");
+  let html = "";
+  for (let r = 0; r < 6; r++) {
+    const word = r < V.rows.length ? V.rows[r] : r === V.rows.length && !V.done ? V.cur : "";
+    const letters = [...word];
+    const score = r < V.rows.length ? vScore(V.rows[r], V.answer) : null;
+    html += '<div class="v-row" role="row" aria-label="' + (r + 1) + '. rinda' + (word ? ": " + word.toUpperCase() : "") + '">';
+    for (let c = 0; c < 5; c++) {
+      const ch = letters[c] || "";
+      const st = score ? ["absent", "present", "correct"][score[c]] : ch ? "filled" : "";
+      const label = ch ? ch.toUpperCase() + (score ? ", " + ["nav vārdā", "ir citur", "īstajā vietā"][score[c]] : "") : "tukšs";
+      html += '<div class="v-tile ' + st + (r === revealRow ? " reveal" : "") + '" role="gridcell" aria-label="' + label + '" style="--i:' + c + '">' + ch.toUpperCase() + "</div>";
+    }
+    html += "</div>";
+  }
+  grid.innerHTML = html;
+  // Tastatūras krāsas: labākais zināmais stāvoklis katram burtam
+  const best = {};
+  V.rows.forEach(w => vScore(w, V.answer).forEach((s, i) => { const ch = [...w][i]; best[ch] = Math.max(best[ch] ?? -1, s); }));
+  $("#v-keys").innerHTML = V_ROWS.map(row => '<div class="v-krow">' + [...row].map(k => {
+    if (k === "⏎") return '<button type="button" class="v-key wide" data-k="enter">MINĒT</button>';
+    if (k === "⌫") return '<button type="button" class="v-key wide" data-k="back" aria-label="Dzēst burtu">⌫</button>';
+    const st = best[k] === undefined ? "" : ["absent", "present", "correct"][best[k]];
+    return '<button type="button" class="v-key ' + st + '" data-k="' + k + '">' + k.toUpperCase() + "</button>";
+  }).join("") + "</div>").join("");
+  const end = $("#v-end");
+  end.hidden = !V.done;
+  if (V.done) {
+    end.innerHTML = (V.won ? '<p class="w-win-title">' + V_WIN[V.rows.length - 1] + "</p>" : '<p class="w-win-title">Šoreiz neizdevās. Vārds bija</p>') +
+      '<p class="w-win-word">' + V.answer.toUpperCase() + "</p>" +
+      '<div class="end-actions">' + (V.won ? '<button type="button" class="primary" id="v-share">Dalīties</button>' : "") +
+      (V.mode === "free" ? '<button type="button" class="secondary" id="v-again">Jauns vārds</button>' : '<button type="button" class="secondary" id="v-to-free">Spēlēt brīvo spēli</button>') + "</div>" +
+      (V.mode === "daily" ? '<p class="w-note">Nākamais dienas vārds būs pieejams rīt.</p>' : "") +
+      '<textarea id="v-share-text" class="w-share-text" rows="8" readonly hidden></textarea>';
+  }
+  vRenderStats();
+}
+
+let vToastTimer = 0;
+function vToast(text, ms = 1800) {
+  const t = $("#v-toast");
+  t.textContent = text;
+  t.hidden = !text;
+  clearTimeout(vToastTimer);
+  if (text && ms) vToastTimer = setTimeout(() => { t.hidden = true; }, ms);
+}
+
+function vShake() {
+  const row = $("#v-grid").children[V.rows.length];
+  if (!row || reduceMotion) return;
+  row.classList.remove("shake"); void row.offsetWidth; row.classList.add("shake");
+}
+
+function vKey(k) {
+  if (V.done || V.busy) return;
+  if (k === "enter") return vSubmit();
+  if (k === "back") { V.cur = [...V.cur].slice(0, -1).join(""); return vRender(); }
+  if (V_LETTERS.includes(k) && [...V.cur].length < 5) { V.cur += k; vRender(); }
+}
+
+function vSubmit() {
+  if ([...V.cur].length < 5) { vToast("Vārdā jābūt 5 burtiem"); vShake(); return; }
+  if (!vAllowed.has(V.cur)) { vToast("Šāda vārda nav sarakstā"); vShake(); return; }
+  V.rows.push(V.cur);
+  V.cur = "";
+  V.won = V.rows[V.rows.length - 1] === V.answer;
+  const finished = V.won || V.rows.length >= 6;
+  if (V.mode === "daily" && V.rows.length === 1) vStatsPlayed();
+  if (finished && V.mode === "daily") vStatsEnd(V.won);
+  vSave();
+  V.busy = !reduceMotion;
+  V.done = false; // atklāšanas animācijas laikā tastatūra vēl redzama
+  vRender(V.rows.length - 1);
+  const after = () => {
+    V.busy = false;
+    V.done = finished;
+    vRender();
+    if (finished) $("#v-end").focus({preventScroll: true});
+  };
+  if (reduceMotion) after(); else setTimeout(after, 5 * 180 + 350);
+}
+
+// ---------- Statistika ----------
+function vStats() { return vStore.get(V_STATS_KEY, {played: 0, wins: 0, streak: 0, maxStreak: 0, dist: [0, 0, 0, 0, 0, 0], lastWin: null, days: {}}); }
+function vStatsPlayed() {
+  const s = vStats();
+  if (s.days[V.day]) return;
+  s.days[V.day] = "sākta"; s.played++;
+  vStore.set(V_STATS_KEY, s);
+}
+function vStatsEnd(won) {
+  const s = vStats();
+  if (s.days[V.day] === "atrasts" || s.days[V.day] === "neatrasts") return;
+  s.days[V.day] = won ? "atrasts" : "neatrasts";
+  if (won) {
+    s.wins++; s.dist[V.rows.length - 1]++;
+    const y = new Date(); y.setDate(y.getDate() - 1);
+    s.streak = s.lastWin === TUVU.dayKey(y) ? s.streak + 1 : 1;
+    s.maxStreak = Math.max(s.maxStreak, s.streak);
+    s.lastWin = V.day;
+  } else s.streak = 0;
+  vStore.set(V_STATS_KEY, s);
+}
+function vRenderStats() {
+  const s = vStats();
+  const pct = s.played ? Math.round(s.wins / s.played * 100) : 0;
+  const max = Math.max(1, ...s.dist);
+  const cur = V.done && V.won && V.mode === "daily" ? V.rows.length - 1 : -1;
+  $("#v-stats").innerHTML =
+    '<dl class="w-stats">' + [["Spēles", s.played], ["Uzvaras", pct + " %"], ["Pašreizējā sērija", s.streak], ["Garākā sērija", s.maxStreak]].map(([k, v]) => "<dt>" + k + "</dt><dd>" + v + "</dd>").join("") + "</dl>" +
+    '<p class="w-label">Minējumu sadalījums</p><ol class="v-dist">' + s.dist.map((n, i) =>
+      '<li><span>' + (i + 1) + '</span><i class="' + (i === cur ? "now" : "") + '" style="width:' + Math.max(8, n / max * 100) + '%">' + n + "</i></li>").join("") + "</ol>";
+}
+
+// ---------- Dalīšanās (burti netiek atklāti) ----------
+function vShareText() {
+  const grid = V.rows.map(w => vScore(w, V.answer).map(s => ["⬛", "🟨", "🟩"][s]).join("")).join("\n");
+  return (V.mode === "daily" ? "VĀRDULIS #" + TUVU.dayNumber() : "VĀRDULIS brīvā spēle") + " " + (V.won ? V.rows.length : "X") + "/6\n\n" + grid;
+}
+async function vShare() {
+  const text = vShareText();
+  try { if (navigator.share && matchMedia("(pointer: coarse)").matches) { await navigator.share({text}); return; } } catch (e) { /* turpina ar kopēšanu */ }
+  try { await navigator.clipboard.writeText(text); vToast("Rezultāts nokopēts!"); }
+  catch (e) { const ta = $("#v-share-text"); ta.value = text; ta.hidden = false; ta.focus(); ta.select(); }
+}
+
+function openVardulis() {
+  setAccent("vardulis");
+  show("vardulis");
+  vStart(V.mode);
+  $("#v-title").focus({preventScroll: true});
+  window.scrollTo(0, 0);
+}
+
+$("#v-keys").addEventListener("mousedown", e => e.preventDefault()); // fokuss paliek, Enter nesaspiež pēdējo burtu
+$("#v-keys").addEventListener("click", e => { const b = e.target.closest(".v-key"); if (b) vKey(b.dataset.k); });
+document.addEventListener("keydown", e => {
+  if (screens.vardulis.hidden) return;
+  if ((e.ctrlKey || e.metaKey) && !e.getModifierState("AltGraph")) return; // AltGr dod garumzīmes
+  if (e.target.closest && e.target.closest("button, input, textarea, summary") && e.key === "Enter") return;
+  if (e.key === "Enter") { e.preventDefault(); vKey("enter"); }
+  else if (e.key === "Backspace") { e.preventDefault(); vKey("back"); }
+  else if ([...e.key].length === 1) { const k = e.key.normalize("NFC").toLowerCase(); if (V_LETTERS.includes(k)) { e.preventDefault(); vKey(k); } }
+});
+$("#v-tab-daily").addEventListener("click", () => vStart("daily"));
+$("#v-tab-free").addEventListener("click", () => vStart("free"));
+$("#v-back").addEventListener("click", () => goStart());
+$("#v-end").addEventListener("click", e => {
+  if (e.target.id === "v-share") vShare();
+  if (e.target.id === "v-again" || e.target.id === "v-to-free") vStart("free");
+});
 
 renderStart();
 </script>
